@@ -78,14 +78,14 @@ class GeneralFunctions:
         return left_lane, right_lane
     
     def draw_lines(self, image, lines):
-        blank = cv2.cvtColor(np.zeros_like(image), cv2.COLOR_GRAY2BGR)
+        blank = cv2.cvtColor(np.zeros_like(image), cv2.COLOR_GRAY2BGRA)
         if lines is not None:
             for line in lines:
                 x1, y1, x2, y2 = line 
                 # slope, y_intercept = np.polyfit((x1, x2), (y1, y2), 1)
                 if x1 != x2:
                     if abs((y2-y1)/(x2-x1)) > 0.2:
-                        cv2.line(blank, (x1, y1), (x2, y2), (0, 255, 0), 2)
+                        cv2.line(blank, (x1, y1), (x2, y2), (0, 255, 0, 1), 2)
                 else:
                     pass
         return blank
@@ -157,3 +157,24 @@ class GeneralFunctions:
                 sct_img.rgb, 
             )
         return cv2.cvtColor(np.array(frame), cv2.COLOR_RGB2BGR)
+    
+    def lane_gui(self, image, direction):
+        x, y = 0, 0  
+        if direction == "R":
+            foreground = cv2.cvtColor(cv2.imread("OpenCV_Assistant\BasicLaneFinding\direction_images\\right.png"), cv2.COLOR_BGR2BGRA)
+            rows, cols, channels = foreground.shape
+            image[y:y+rows, x:x+cols] = foreground
+        
+        elif direction == "L":
+            foreground = cv2.cvtColor(cv2.imread("OpenCV_Assistant\BasicLaneFinding\direction_images\left.png"), cv2.COLOR_BGR2BGRA)
+            cv2.cvtColor(foreground, cv2.COLOR_BGR2BGRA)
+            rows, cols, channels = foreground.shape
+            image[y:y+rows, x:x+cols] = foreground        
+            
+        elif direction == "S":
+            foreground = cv2.cvtColor(cv2.imread("OpenCV_Assistant\BasicLaneFinding\direction_images\straight.png"), cv2.COLOR_BGR2BGRA)
+            cv2.cvtColor(foreground, cv2.COLOR_BGR2BGRA)
+            rows, cols, channels = foreground.shape
+            image[y:y+rows, x:x+cols] = foreground
+            
+        return image
