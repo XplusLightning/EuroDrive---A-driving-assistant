@@ -57,9 +57,3 @@ def HoldKey(hexKeyCode, time):
 
 
 # directx scan codes https://gist.github.com/dretax/fe37b8baf55bc30e9d63
-if "__main__" == __name__:
-    while (True):
-        PressKey(0x11)
-        time.sleep(1)
-        ReleaseKey(0x11)
-        time.sleep(1)
