@@ -8,7 +8,7 @@ class GeneralFunctions:
     def __init__(self):
         pass 
     
-    def resize(self, image, scale_percent):
+    def resize(self, image, scale_percent=50):
         if image is None:
             raise Exception("Image is None")
         
@@ -141,8 +141,8 @@ class GeneralFunctions:
     
     def make_coordinates(self, image, line_parameters):
         slope, intercept = line_parameters
-        y1 = image.shape[0] - 150
-        y2 = int(y1 * 0.6)
+        y1 = image.shape[0] - 250
+        y2 = int(y1 * 0.7)
         x1 = int((y1 - intercept)/slope)
         x2 = int((y2 - intercept)/slope)
         return [x1, y1, x2, y2]
@@ -178,3 +178,4 @@ class GeneralFunctions:
             image[y:y+rows, x:x+cols] = foreground
             
         return image
+

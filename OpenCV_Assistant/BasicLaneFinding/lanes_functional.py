@@ -11,8 +11,10 @@ controler = LaneControler()
 scaling_percent = 50
 old_left_lane, old_right_lane = [0, 0, 0, 0], [0, 0, 0, 0]
 mask_vertices = [(1300, 750), (500, 750), (700, 450), (1100, 450)]
-mask_vertices = [(1300, 750), (700, 750), (900, 550), (1100, 550)]
+# mask_vertices = [(1300, 750), (900, 750), (1000, 550), (1100, 550)]
+mask_vertices = [(1300, 750), (700, 750), (925, 550), (1075, 550)]
 live = True
+steering = True
 
 image = cv2.imread('TestImages\Straight_Clear_Dawn.jpg')
 image = cv2.imread('TestImages\Test1.png')
@@ -25,6 +27,7 @@ video = cv2.VideoCapture('TestVideos\Turns_Rain_Dusk.mkv')
 video = cv2.VideoCapture('TestVideos\Turn_Clear_Dawn.mkv')
 # video = cv2.VideoCapture(2)
 video = cv2.VideoCapture('TestVideos\Italy_Turns_Clear.mkv')
+
 
 while True:
     
@@ -63,23 +66,22 @@ while True:
     lane_image = cv2.addWeighted(left_lane_image, 0.8, right_lane_image, 1, 1)
     overlayed_lanes = cv2.addWeighted(cv2.cvtColor(image_copy, cv2.COLOR_BGR2BGRA), 0.8, lane_image, 1, 1)
     
-    direction, angle = controler.lane_control(left_lane, right_lane)
+    direction, angle = controler.lane_control(left_lane, right_lane, steering)
     lane_gui = general.lane_gui(overlayed_lanes, direction)
     overlayed_gui = cv2.addWeighted(overlayed_lanes, 0.8, lane_gui, 1, 1)
     overlayed_gui = cv2.putText(overlayed_gui, f"{float(angle):.2f}", (100, 200), cv2.FONT_HERSHEY_PLAIN, 4, (0, 0, 255), 2, cv2.LINE_AA)
-    overlayed_scaled = general.resize(overlayed_gui, scaling_percent)
     
     # cv2.imshow("Image", scaled_copy)
     # cv2.imshow("Mask", scaled_mask)
-    # cv2.imshow("Greyscaled Mask", greyscaled_mask)
+    cv2.imshow("Greyscaled Mask", general.resize(greyscaled_mask))
     # cv2.imshow("Blur", blur)
     # cv2.imshow("Edges", edges)
     # cv2.imshow("Edges2", edges2)
-    # cv2.imshow("Second Mask", second_mask)
+    cv2.imshow("Second Mask", general.resize(second_mask))
     # cv2.imshow("Left Lane", left_lane_image)
     # cv2.imshow("Right Lane", right_lane_image)
     # cv2.imshow("Lanes", lane_image)
-    cv2.imshow("Overlayed Lanes", overlayed_scaled)
+    cv2.imshow("Overlayed Lanes", general.resize(overlayed_gui, scaling_percent))
     
     if cv2.waitKey(10) & 0xFF == ord('b'):
         break

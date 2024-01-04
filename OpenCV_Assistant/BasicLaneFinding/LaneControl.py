@@ -2,10 +2,14 @@ import numpy as np
 from pyautogui import keyDown, keyUp
 from time import sleep
 import cv2
+from KeyPresses import HoldKey
+
 
 class LaneControler:
     def __init__(self):
-        pass 
+        self.a = 0x1E
+        self.d = 0x20
+        self.w = 0x11
     
     def gradient(self, line):
         x1, y1, x2, y2 = line
@@ -21,23 +25,19 @@ class LaneControler:
         right_angle = self.lane_angle_degrees(right_lane)
         return (left_angle + right_angle) / 2
     
-    def lane_control(self, left_lane, right_lane):
+    def lane_control(self, left_lane, right_lane, steering):
         angle = self.steering_angle(left_lane, right_lane)
         time = 0.05
         if angle > 10:
-            keyDown("d")
-            sleep(time)
-            keyUp("d")
+            if steering:
+                HoldKey(self.d, time)
             return "R", angle
             
         elif angle < -10:
-            keyDown("a")
-            sleep(time)
-            keyUp("a")
+            if steering:
+                HoldKey(self.a, time)
             return "L", angle
         return "S", angle
         
         
-        
-        
-        
+
