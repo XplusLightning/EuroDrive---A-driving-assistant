@@ -13,7 +13,7 @@ old_left_lane, old_right_lane = [0, 0, 0, 0], [0, 0, 0, 0]
 mask_vertices = [(1300, 750), (500, 750), (700, 450), (1100, 450)]
 # mask_vertices = [(1300, 750), (900, 750), (1000, 550), (1100, 550)]
 mask_vertices = [(1300, 750), (700, 750), (925, 550), (1075, 550)]
-live = True
+live = False
 steering = True
 
 image = cv2.imread('TestImages\Straight_Clear_Dawn.jpg')
@@ -66,8 +66,8 @@ while True:
     lane_image = cv2.addWeighted(left_lane_image, 0.8, right_lane_image, 1, 1)
     overlayed_lanes = cv2.addWeighted(cv2.cvtColor(image_copy, cv2.COLOR_BGR2BGRA), 0.8, lane_image, 1, 1)
     
-    direction, angle = controler.lane_control(left_lane, right_lane, steering)
-    lane_gui = general.lane_gui(overlayed_lanes, direction)
+    angle = controler.lane_control(left_lane, right_lane, steering)
+    lane_gui = general.lane_gui(overlayed_lanes, angle)
     overlayed_gui = cv2.addWeighted(overlayed_lanes, 0.8, lane_gui, 1, 1)
     overlayed_gui = cv2.putText(overlayed_gui, f"{float(angle):.2f}", (100, 200), cv2.FONT_HERSHEY_PLAIN, 4, (0, 0, 255), 2, cv2.LINE_AA)
     

@@ -31,13 +31,13 @@ class LaneControler:
         if angle > 10:
             if steering:
                 HoldKey(self.d, time)
-            return "R", angle
+            return angle
             
         elif angle < -10:
             if steering:
                 HoldKey(self.a, time)
-            return "L", angle
-        return "S", angle
+            return angle
+        return angle
         
         
 

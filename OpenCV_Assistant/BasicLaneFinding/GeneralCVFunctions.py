@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 from mss import mss 
 from PIL import Image
-
+from math import sin, cos, radians
 
 class GeneralFunctions:
     def __init__(self):
@@ -158,24 +158,29 @@ class GeneralFunctions:
             )
         return cv2.cvtColor(np.array(frame), cv2.COLOR_RGB2BGR)
     
-    def lane_gui(self, image, direction):
+    def lane_gui(self, image, angle):
         x, y = 0, 0  
-        if direction == "R":
+        if angle > 10:
             foreground = cv2.cvtColor(cv2.imread("OpenCV_Assistant\BasicLaneFinding\direction_images\\right.png"), cv2.COLOR_BGR2BGRA)
             rows, cols, channels = foreground.shape
             image[y:y+rows, x:x+cols] = foreground
         
-        elif direction == "L":
+        elif angle < -10:
             foreground = cv2.cvtColor(cv2.imread("OpenCV_Assistant\BasicLaneFinding\direction_images\left.png"), cv2.COLOR_BGR2BGRA)
             cv2.cvtColor(foreground, cv2.COLOR_BGR2BGRA)
             rows, cols, channels = foreground.shape
             image[y:y+rows, x:x+cols] = foreground        
             
-        elif direction == "S":
+        else:
             foreground = cv2.cvtColor(cv2.imread("OpenCV_Assistant\BasicLaneFinding\direction_images\straight.png"), cv2.COLOR_BGR2BGRA)
             cv2.cvtColor(foreground, cv2.COLOR_BGR2BGRA)
             rows, cols, channels = foreground.shape
             image[y:y+rows, x:x+cols] = foreground
-            
+        
+        
+        point1 = (960, 800)
+        point2 = (int(50*sin(radians(angle))+960), 800-int(50*cos(radians(angle))))
+        image = cv2.arrowedLine(image, point1, point2, (0, 0, 255, 1), 2)
+        
         return image
 
