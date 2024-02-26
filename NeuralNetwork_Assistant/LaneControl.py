@@ -63,13 +63,6 @@ class LaneControler:
         border = 40
         steering_angle = new_angle
         
-        # if abs(new_angle - old_angle) > 90:
-        #     steering_angle = old_angle
-        # else:
-        #     steering_angle = new_angle
-        #     old_angle = np.copy(new_angle)
-        
-        # if line is central
         if middle - border < intersect < middle + border: 
             if steering_angle > 10:
                 steering_direction = "right steer"

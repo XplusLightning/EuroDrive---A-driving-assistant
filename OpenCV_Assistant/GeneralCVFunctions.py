@@ -9,28 +9,20 @@ class GeneralFunctions:
         pass 
     
     def resize(self, image, scale_percent=50):
-        if image is None:
-            raise Exception("Image is None")
-        
         width = int(image.shape[1] * scale_percent / 100)
         height = int(image.shape[0] * scale_percent / 100)
         new_dimensions = (width, height)
         return cv2.resize(image, new_dimensions, interpolation=cv2.INTER_AREA) 
     
+    
     def rectangle_mask(self, image, vertices):
-        if image is None:
-            raise Exception("Image is None")
-        
         mask = np.zeros(image.shape[:2], dtype="uint8")
         cv2.rectangle(mask, vertices[0], vertices[1], 255, -1)
         masked_image = cv2.bitwise_and(image, image, mask=mask)
         return masked_image
-    # (1300, 750), (1300, 300), (500, 750), (500, 300)
+
     
     def polygon_mask(self, image, vertices):
-        if image is None:
-            raise Exception("Image is None")
-        
         vertices = np.array(vertices, dtype=np.int32).reshape((-1, 1, 2))
         mask = np.zeros(image.shape[:2], dtype="uint8")
         cv2.fillPoly(mask, [vertices], 255)
@@ -38,38 +30,23 @@ class GeneralFunctions:
     
     
     def greyscale(self, image):
-        if image is None:
-            raise Exception("Image is None")
-        
         return cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
     
     
     def blur(self, image, kernel_size=5):
-        if image is None:
-            raise Exception("Image is None")
-        
         return cv2.GaussianBlur(image, (kernel_size, kernel_size), 0)
     
     
     def edge_detection(self, image, threshold_1=50, threshold_2=150):
-        if image is None:
-            raise Exception("Image is None")
-        
         return cv2.Canny(image, threshold_1, threshold_2)
 
     
     def approximate_lane_lines(self, image):
-        if image is None:
-            raise Exception("Image is None")
-
         lines = cv2.HoughLinesP(image, 2, np.pi/180, 100, minLineLength=50, maxLineGap=500)
         if lines is None:
             return [0, 0, 0, 0], [0, 0, 0, 0], np.zeros_like(image)
         left_lane, right_lane = self.lane_approximations(image, lines)
-        
         lane_image = self.draw_lines(image, lines, (8, 118, 241, 1))
-            
- 
         return left_lane, right_lane, lane_image
     
     def draw_lines(self, image, lines, colour=(0, 255, 0, 1)):
@@ -77,12 +54,10 @@ class GeneralFunctions:
         if lines is not None:
             for line in lines:
                 x1, y1, x2, y2 = line.reshape(4) 
-                # slope, y_intercept = np.polyfit((x1, x2), (y1, y2), 1)
                 if x1 != x2:
                     if abs((y2-y1)/(x2-x1)) > 0.2:
                         cv2.line(blank, (x1, y1), (x2, y2), colour, 2)
-                else:
-                    pass
+                        
         return blank
         
         
@@ -90,7 +65,6 @@ class GeneralFunctions:
         new_array = []
         for i in array:
             new_array.append((int(i[0] * scale/100), int(i[1] * scale/100)))
-        
         return new_array
     
     def adjusted_array(self, array, adjustment):
@@ -99,7 +73,6 @@ class GeneralFunctions:
         new_array.append((int(array[1][0] + adjustment), int(array[1][1] - adjustment)))
         new_array.append((int(array[2][0] + adjustment), int(array[2][1] + adjustment)))
         new_array.append((int(array[3][0] - adjustment), int(array[3][1] + adjustment)))
-        
         return new_array
     
     def lane_approximations(self, image, lines):
@@ -116,9 +89,7 @@ class GeneralFunctions:
                     left_fit.append((slope, y_intercept))
                 elif slope > slope_threshold:
                     right_fit.append((slope, y_intercept))
-            else:
-                pass
-        
+
         if len(left_fit) != 0:
             left_fit_average = np.average(left_fit, axis=0)
             left_line = self.make_coordinates(image, left_fit_average)

@@ -10,9 +10,6 @@ class GeneralFunctions:
     
     
     def resize(self, image, scale_percent=50):
-        if image is None:
-            raise Exception("Image is None")
-        
         width = int(image.shape[1] * scale_percent / 100)
         height = int(image.shape[0] * scale_percent / 100)
         new_dimensions = (width, height)
@@ -20,9 +17,6 @@ class GeneralFunctions:
     
     
     def rectangle_mask(self, image, vertices):
-        if image is None:
-            raise Exception("Image is None")
-        
         mask = np.zeros(image.shape[:2], dtype="uint8")
         cv2.rectangle(mask, vertices[0], vertices[1], 255, -1)
         masked_image = cv2.bitwise_and(image, image, mask=mask)
@@ -30,9 +24,6 @@ class GeneralFunctions:
 
 
     def polygon_mask(self, image, vertices):
-        if image is None:
-            raise Exception("Image is None")
-        
         vertices = np.array(vertices, dtype=np.int32).reshape((-1, 1, 2))
         mask = np.zeros(image.shape[:2], dtype="uint8")
         cv2.fillPoly(mask, [vertices], 255)
@@ -40,30 +31,18 @@ class GeneralFunctions:
     
     
     def greyscale(self, image):
-        if image is None:
-            raise Exception("Image is None")
-        
         return cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
     
     
     def blur(self, image, kernel_size=5):
-        if image is None:
-            raise Exception("Image is None")
-        
         return cv2.GaussianBlur(image, (kernel_size, kernel_size), 0)
     
     
     def edge_detection(self, image, threshold_1=50, threshold_2=150):
-        if image is None:
-            raise Exception("Image is None")
-        
         return cv2.Canny(image, threshold_1, threshold_2)
     
     
     def approximate_lane_lines(self, image):
-        if image is None:
-            raise Exception("Image is None")
-
         lines = cv2.HoughLinesP(image, 2, np.pi/180, 100, minLineLength=20, maxLineGap=200)
         if lines is None:
             lines = []
@@ -79,8 +58,6 @@ class GeneralFunctions:
                 if x1 != x2:
                     if abs((y2-y1)/(x2-x1)) > 0.2:
                         blank = cv2.line(blank, (x1, y1), (x2, y2), (0, 255, 0, 1), 2)
-                else:
-                    pass
         return blank
         
         
@@ -88,7 +65,6 @@ class GeneralFunctions:
         new_array = []
         for i in array:
             new_array.append((int(i[0] * scale/100), int(i[1] * scale/100)))
-        
         return new_array
     
     
@@ -98,7 +74,6 @@ class GeneralFunctions:
         new_array.append((int(array[1][0] + adjustment), int(array[1][1] - adjustment)))
         new_array.append((int(array[2][0] + adjustment), int(array[2][1] + adjustment)))
         new_array.append((int(array[3][0] - adjustment), int(array[3][1] + adjustment)))
-        
         return new_array
     
     
@@ -116,8 +91,6 @@ class GeneralFunctions:
                     left_fit.append((slope, y_intercept))
                 elif slope > slope_threshold:
                     right_fit.append((slope, y_intercept))
-            else:
-                pass
         
         if len(left_fit) != 0:
             left_fit_average = np.average(left_fit, axis=0)
@@ -175,21 +148,17 @@ class GeneralFunctions:
         overlayed_gui = cv2.putText(image, f"{float(angle):.2f}", (150, 20), cv2.FONT_HERSHEY_PLAIN, 1.2, (0, 0, 255), 1, cv2.LINE_AA)
         overlayed_gui = cv2.putText(image, f"{float(x_intersect):.2f}", (150, 40), cv2.FONT_HERSHEY_PLAIN, 1.2, (0, 0, 255), 1, cv2.LINE_AA)
         overlayed_gui = cv2.putText(image, steering_direction, (150, 60), cv2.FONT_HERSHEY_PLAIN, 1.2, (0, 0, 255), 1, cv2.LINE_AA)
-
         return overlayed_gui
 
 
     def mask_centre(self, vertices):
         x1, y1 = vertices[0]
         x2, y2 = vertices[1]
-        
         return (int((x1+x2)/2), int((y1+y2)/2))
     
     
     def mean_line(self, image):
-        # image = cv2.cvtColor(image, cv2.COLOR_BGRA2GRAY)
         blank = np.zeros_like(image)
-        # print(image)
         const = int(image.shape[0] * 0.3)
         const2 = int(image.shape[0] * 0.8)
         x_coords = []
@@ -212,7 +181,7 @@ class GeneralFunctions:
         blank = cv2.line(blank, (x1, y1), (x2, y2), 100, 1)
         for i, x in enumerate(x_coords):
             blank = cv2.line(blank, (int(x), int(y_coords[i])), (int(x), int(y_coords[i])), 255, 1)
-        
+            
         return blank, slope, y_intercept
     
     
@@ -231,9 +200,7 @@ class GeneralFunctions:
     def barrier_check(self, array):
         pixel_range = 3
         image = np.zeros_like(array)
-        # middle_column_index = int(array.shape[1]/2)
         middle_column_index = int(array.shape[1]/2)
-        
         
         for row in range(0, array.shape[0], pixel_range):
             for column in range(middle_column_index, array.shape[1]):
@@ -285,7 +252,6 @@ class GeneralFunctions:
         if x1-x2 != 0:
             image = cv2.line(image, (x1, y1), (x2, y2), 100, 1)
         
-        
         return image, angle, x_intersect, filtered_barriers
 
 
@@ -300,25 +266,8 @@ class GeneralFunctions:
                 total += i
                 x1, y1, x2, y2 = i.reshape(4)
                 line_image = cv2.line(line_image, (x1, y1), (x2, y2), 255, 2)
-            # print(total)
             total = total/len(lines)
             
         return line_image, total if lines is not None else None
-
-
-
-if __name__ == '__main__':
-    a= GeneralFunctions()
-    image = a.screenshot()
-    image = a.resize(image, 20)
-    image = a.greyscale(image)
-    print(image.shape)
-    barrier = a.barrier_check(image)
-    middle = a.middle_of_barriers(barrier)
-    cv2.imshow('barrier', barrier)
-    cv2.imshow('middle', middle)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
-    
     
     

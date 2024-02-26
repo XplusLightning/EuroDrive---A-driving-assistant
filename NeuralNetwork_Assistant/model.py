@@ -4,7 +4,6 @@ import torch.nn as nn
 from torchvision import models
 import torch.nn.functional as F
 from utils import *
-import operator
 from config import args_setting
 
 

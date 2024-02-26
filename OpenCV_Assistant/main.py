@@ -9,7 +9,7 @@ controler = LaneControler()
 scaling_percent = 40
 old_left_lane, old_right_lane = [0, 0, 0, 0], [0, 0, 0, 0]
 mask_vertices = [(1300, 750), (700, 750), (925, 550), (1075, 550)]
-video = cv2.VideoCapture("TestVideos//2024-02-10 13-29-18.mkv")
+video = cv2.VideoCapture("")
 live = True
 steering = False
 k=0
@@ -50,31 +50,10 @@ while True:
     cv2.imshow("Original", general.resize(image, scaling_percent))
     cv2.imshow("First Mask", general.resize(mask, scaling_percent))
     cv2.imshow("Straight Lanes", general.resize(straight_lines, scaling_percent))
-    # cv2.imshow("Greyscaled Mask", general.resize(greyscaled_mask, scaling_percent))
-    # cv2.imshow("Blur", general.resize(blur, scaling_percent))
-    # cv2.imshow("Edges", general.resize(edges, scaling_percent))
-    # cv2.imshow("Second Mask", general.resize(second_mask, scaling_percent))
-    # cv2.imshow("Left Lane", general.resize(left_lane_image, scaling_percent))
-    # cv2.imshow("Right Lane", general.resize(right_lane_image, scaling_percent))
-    # cv2.imshow("Lanes", general.resize(lane_image, scaling_percent))
     cv2.imshow("Overlayed Lanes", general.resize(lane_gui, scaling_percent))
     
     if cv2.waitKey(100) & 0xFF == ord('b'):
         break
-    # if cv2.waitKey(100) & 0xFF == ord('c'):
-        # cv2.imwrite(f"OpenCV_Assistant\\BasicLaneFinding\\Images\\Original_CV_{k}.png", image)
-        # cv2.imwrite(f"OpenCV_Assistant\\BasicLaneFinding\\Images\\Hough_Lines_CV_{k}.png", cv2.cvtColor(straight_lines, cv2.COLOR_BGRA2BGR))
-        # cv2.imwrite(f"OpenCV_Assistant\\BasicLaneFinding\\Images\\First Mask_CV_{k}.png", mask)
-        # cv2.imwrite(f"OpenCV_Assistant\\BasicLaneFinding\\Images\\Greyscaled Mask_CV_{k}.png", greyscaled_mask)
-        # cv2.imwrite(f"OpenCV_Assistant\\BasicLaneFinding\\Images\\Blur_CV_{k}.png", blur)
-        # cv2.imwrite(f"OpenCV_Assistant\\BasicLaneFinding\\Images\\Edges_CV_{k}.png", edges)
-        # cv2.imwrite(f"OpenCV_Assistant\\BasicLaneFinding\\Images\\Second Mask_CV_{k}.png", second_mask)
-        # cv2.imwrite(f"OpenCV_Assistant\\BasicLaneFinding\\Images\\Left Lane_CV_{k}.png", left_lane_image)
-        # cv2.imwrite(f"OpenCV_Assistant\\BasicLaneFinding\\Images\\Right Lane_CV_{k}.png", right_lane_image)
-        # cv2.imwrite(f"OpenCV_Assistant\\BasicLaneFinding\\Images\\Lanes_CV_{k}.png", lane_image)
-        # cv2.imwrite(f"OpenCV_Assistant\\BasicLaneFinding\\Images\\Overlayed Lanes_CV_{k}.png", lane_gui)
-
-        k+=1
     
 video.release()
 cv2.destroyAllWindows()

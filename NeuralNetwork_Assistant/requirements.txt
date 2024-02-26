@@ -1,0 +1,6 @@
+mss==5.0.0
+numpy==1.19.5
+opencv_python==3.4.4.19
+Pillow==5.4.1
+torch==1.0.0
+torchvision==0.2.0

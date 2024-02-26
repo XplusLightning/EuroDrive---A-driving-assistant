@@ -1,9 +1,7 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-import math
-import numpy as np
-from torch.autograd import Variable
+
 
 class double_conv(nn.Module):
     '''(conv => BN => ReLU) * 2'''
